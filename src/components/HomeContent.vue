@@ -1,163 +1,55 @@
 <template>
-  <div id="app-content">
-    <div>
-      <!-- <LoginForm /> -->
-      <!-- <RegisterForm /> -->
+  <div class="next-steps">
+    <h2 class="my-5 text-center">What can I do next?</h2>
+
+    <div class="row">
+      <div class="col-md-5 mb-4">
+        <h6 class="mb-3">
+          <a href="https://auth0.com/docs/connections">
+            <font-awesome-icon icon="link" class="mr-2" />Configure other identity providers
+          </a>
+        </h6>
+        <p>Auth0 supports social providers as Facebook, Twitter, Instagram and 100+, Enterprise providers as Microsoft Office 365, Google Apps, Azure, and more. You can also use any OAuth2 Authorization Server.</p>
+      </div>
+
+      <div class="col-md"></div>
+
+      <div class="col-md-5 mb-4">
+        <h6 class="mb-3">
+          <a href="https://auth0.com/docs/multifactor-authentication">
+            <font-awesome-icon icon="link" class="mr-2" />Enable Multifactor Authentication
+          </a>
+        </h6>
+        <p>Add an extra layer of security by enabling Multi-factor Authentication, requiring your users to provide more than one piece of identifying information. Push notifications, authenticator apps, SMS, and DUO Security are supported.</p>
+      </div>
     </div>
-    <img alt="Vue logo" 
-      src="./assets/logo.png" 
-      height="100px" width="100px">
-    <br>
-    <SizeEditor
-      id="size-editor"
-      :num-cols="numCols" 
-      :num-rows="numRows" 
-      @reset-matrix="(data) => handleReset(data.col, data.row)"> 
-    </SizeEditor>
-    <br>
-    <div id="matrix-container">
-      <table id="colorMatrix">
-        <tr v-for="(row, i) in matrix.value" :key="i">
-          <td class="rounded" v-for="(cell, j) in row" :key="j"
-              :style="getStyle(i,j)"
-              @click="highLightChunk(i,j)"
-          ></td>
-        </tr>
-      </table>
+
+    <div class="row">
+      <div class="col-md-5 mb-4">
+        <h6 class="mb-3">
+          <a href="https://auth0.com/docs/anomaly-detection">
+            <font-awesome-icon icon="link" class="mr-2" />Anomaly Detection
+          </a>
+        </h6>
+        <p>Auth0 can detect anomalies and stop malicious attempts to access your application. Anomaly detection can alert you and your users of suspicious activity, as well as block further login attempts.</p>
+      </div>
+
+      <div class="col-md"></div>
+
+      <div class="col-md-5 mb-4">
+        <h6 class="mb-3">
+          <a href="https://auth0.com/docs/rules">
+            <font-awesome-icon icon="link" class="mr-2" />Learn About Rules
+          </a>
+        </h6>
+        <p>Rules are JavaScript functions that execute when a user authenticates to your application. They run once the authentication process is complete, and you can use them to customize and extend Auth0's capabilities.</p>
+      </div>
     </div>
   </div>
 </template>
 
-<script setup>
-  import {onMounted, reactive, ref} from 'vue';
-  import SizeEditor from '../components/SizeEditor.vue';
-
-  var numRows = ref(5);
-  var numCols = ref(5);
-  var matrix = reactive([]);
-  var visited = reactive(new Set());
-  var click_count = ref(0);
-
-  class CellData
-  {
-      constructor(y, x, color)
-      {
-          this.y = y;
-          this.x = x;
-          this.color = color;
-      }
-  }
-
-  function getRandomColor() 
-  {
-      const COLORS = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF'];
-      const randomIndex = Math.floor(Math.random() * COLORS.length);
-      return COLORS[randomIndex];
-  }
-
-  function getStyle(i,j)
-  {
-    const cellData = matrix.value[i][j];
-    let borderStyle = visited.has(cellData) ? '3px solid black' : '3px solid transparent';
-    return {'background-color': cellData.color,
-            'border': borderStyle,
-            'width': '30px',
-            'height': '30px'};
-  }
-
-  function getAdjs(cellData)
-  {
-      const adjs = [];
-      const directions = [
-          { y: -1, x: 0 }, // Top
-          { y: 0, x: 1 },  // Right
-          { y: 1, x: 0 },  // Bottom
-          { y: 0, x: -1 }  // Left
-      ];
-
-      directions.forEach(dir => {
-          const x = dir.x + cellData.x;
-          const y = dir.y + cellData.y;
-          let valid = x >= 0 && x < numCols.value &&
-                      y >= 0 && y < numRows.value;
-          if (valid) adjs.push(matrix.value[y][x])
-      });
-
-      return adjs;
-  }
-
-  function dfs(cellData)
-  {
-      if (visited.has(cellData)) 
-          return;
-      visited.add(cellData);
-      
-      const adjs = getAdjs(cellData);
-      adjs.forEach(neighbor => {
-          if (neighbor.color === cellData.color) 
-              dfs(neighbor);
-      });
-  }
-
-  function highLightChunk(i, j)
-  {
-      const cellData = matrix.value[i][j];
-      click_count.value++;
-      console.log(click_count.value);
-      visited.clear();
-      dfs(cellData);
-  }
-
-  function handleReset(col, row)
-  {
-    numCols.value = col;
-    numRows.value = row;
-    resetMatrix();
-  }
-
-  function resetMatrix()
-  {
-    matrix.value = [];
-
-    // INIT DATA MATRIX
-    for (let i = 0; i < numRows.value; i++) 
-    {
-        const row = [];
-        for (let j = 0; j < numCols.value; j++) 
-        {
-            const color = getRandomColor();
-            row.push(new CellData(i, j, color));
-        }
-        matrix.value.push(row);
-    }
-  }
-
-  onMounted(() => {
-    resetMatrix();
-  });
+<script lang="ts">
+export default {
+  name: "HomeContent"
+};
 </script>
-
-<style>
-  #app-content {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    text-align: center;
-    align-items: center;
-  }
-
-  #matrix-container{
-    margin: 30px;
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #size-editor{
-    margin: 30px;
-  }
-
-  #colorMatrix{
-    border-spacing: 5px;
-    border-collapse: separate;
-  }
-</style>

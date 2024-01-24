@@ -20,9 +20,12 @@
             <li class="nav-item">
               <router-link to="/" class="nav-link">Home</router-link>
             </li>
+            <li class="nav-item">
+              <router-link to="/Game" class="nav-link">Game</router-link>
+            </li>
           </ul>
           <ul class="navbar-nav d-none d-md-block">
-            <li v-if="!isAuthenticated && !isLoading" class="nav-item">
+            <li class="nav-item" v-if="!isAuthenticated">
               <button
                 id="qsLoginBtn"
                 class="btn btn-primary btn-margin"
@@ -56,7 +59,7 @@
             </li>
           </ul>
 
-          <ul class="navbar-nav d-md-none" v-if="!isAuthenticated && !isLoading">
+          <ul class="navbar-nav d-md-none">
             <button id="qsLoginBtn" class="btn btn-primary btn-block" @click="login">Log in</button>
           </ul>
 

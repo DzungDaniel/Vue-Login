@@ -3,7 +3,7 @@
     <nav-bar />
     <div class="container flex-grow-1">
       <error />
-      <div class="mt-5">
+      <div class="mt-2">
         <router-view />
       </div>
     </div>
@@ -20,11 +20,15 @@
 <script lang="ts">
 import NavBar from "./components/NavBar.vue";
 import Error from "./components/Error.vue";
+import Game from "./components/Game.vue";
+import SizeEditor from "./components/SizeEditor.vue"
 
 export default {
   components: {
     NavBar,
-    Error
+    Error,
+    Game,
+    SizeEditor
   }
 };
 </script>
