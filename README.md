@@ -18,3 +18,6 @@ npm run serve
 http://localhost:3000/
 
 ![Alt text](./assets/image.png)
+
+## Live Demo
+A live instance of this project is hosted on: https://main--candid-peony-e21780.netlify.app/#/
